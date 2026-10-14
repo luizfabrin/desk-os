@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#070b18">
+<title>Desk OS</title>
+<style>
+:root{--bg:#070b18;--panel:#111a30;--line:#263554;--text:#eef5ff;--muted:#9db0ce;--cyan:#56e0ff;--violet:#9b8cff;--green:#63f0bd}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#162b53 0,transparent 42%),var(--bg);color:var(--text);font:16px system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+button,input{font:inherit}button{cursor:pointer;border:1px solid #33486b;background:#192744;color:var(--text);border-radius:14px;padding:13px 15px;transition:.15s}button:hover{border-color:var(--cyan);transform:translateY(-1px)}button:active{transform:scale(.98)}.app{max-width:1100px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-weight:900;letter-spacing:.16em;font-size:1.2rem}.brand span{color:var(--cyan)}.status{font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:8px}.dot{width:9px;height:9px;background:#f5ba59;border-radius:50%;display:inline-block}.dot.ok{background:var(--green)}.hero{margin:28px 0 18px;display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}.eyebrow{color:var(--cyan);text-transform:uppercase;letter-spacing:.15em;font-size:.75rem;font-weight:800}.clock{font-size:clamp(3.6rem,11vw,7rem);font-weight:800;letter-spacing:-.07em;line-height:1.05}.date{color:var(--muted);margin-top:7px}.chip{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--muted);font-size:.8rem}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.tile{min-height:145px;text-align:left;padding:18px;border-radius:22px;background:linear-gradient(145deg,#162544,#0e172a);position:relative;overflow:hidden}.tile .ico{font-size:1.7rem;display:block;margin-bottom:15px}.tile strong{display:block;font-size:1.03rem}.tile small{display:block;color:var(--muted);margin-top:6px}.tile.active{border-color:var(--cyan);box-shadow:0 0 24px #56e0ff16}.wide{grid-column:span 2}.panel{margin-top:14px;padding:20px;border:1px solid var(--line);border-radius:22px;background:#0e1728dd}.panel h2{margin:0 0 8px;font-size:1.1rem}.muted{color:var(--muted);font-size:.92rem}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row button{flex:1}.visualizer{height:74px;display:flex;gap:5px;align-items:center;justify-content:center;margin:16px 0}.bar{width:8px;border-radius:99px;background:linear-gradient(var(--cyan),var(--violet));height:20%;animation:pulse .8s ease-in-out infinite alternate}.bar:nth-child(3n){animation-delay:.2s}.bar:nth-child(2n){animation-delay:.4s}@keyframes pulse{to{height:90%}}.hidden{display:none!important}.remote .clock-wrap,.remote .grid,.remote .info-panel{display:none}.remote .hero{margin-top:30px}.remote .clock{font-size:2.3rem}.remote .remote-only{display:block}.remote-only{display:none}.remote-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}.remote-controls button{min-height:74px;font-weight:700}.remote-controls .wide{grid-column:span 2}.field{display:flex;flex-direction:column;gap:6px;min-width:150px;flex:1}.field input{width:100%;padding:12px;border-radius:10px;background:#081020;border:1px solid var(--line);color:var(--text)}.footer{color:#7186a8;font-size:.78rem;margin:22px 0 8px}.notice{border-left:3px solid var(--cyan);padding:10px 13px;background:#12213a;color:#c7d8f3;border-radius:0 10px 10px 0;font-size:.88rem}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#d9faff;color:#06101e;padding:11px 16px;border-radius:12px;font-weight:700;display:none;max-width:90vw}
+@media(max-width:700px){.app{padding:16px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tile{min-height:125px;padding:15px}.wide{grid-column:span 2}.clock{font-size:4.4rem}.hero{margin-top:24px}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="top">
+    <div class="brand">DESK <span>OS</span></div>
+    <div class="status"><i class="dot" id="dot"></i><span id="status">Modo local — configure a sincronização</span></div>
+  </header>
+  <section class="hero">
+    <div class="clock-wrap"><div class="eyebrow">Seu espaço digital</div><div class="clock" id="clock">00:00</div><div class="date" id="date">Carregando data…</div></div>
+    <div class="chip" id="modeChip">PAINEL PRINCIPAL</div>
+  </section>
+
+  <main id="displayView">
+    <section class="grid">
+      <button class="tile active" data-action="home"><span class="ico">⌂</span><strong>Início</strong><small>Voltar ao painel</small></button>
+      <button class="tile" data-action="music"><span class="ico">♫</span><strong>Música</strong><small>Visualizador de som</small></button>
+      <button class="tile" data-action="focus"><span class="ico">◷</span><strong>Foco</strong><small>Temporizador de estudo</small></button>
+      <button class="tile" data-action="colors"><span class="ico">✦</span><strong>Ambiente</strong><small>Trocar o tema</small></button>
+      <button class="tile wide" data-action="quote"><span class="ico">✧</span><strong>Inspiração</strong><small>Uma frase para o seu dia</small></button>
+      <button class="tile wide" data-action="game"><span class="ico">▦</span><strong>Mini desafio</strong><small>Teste rápido de atenção</small></button>
+    </section>
+    <section class="panel info-panel" id="contentPanel">
+      <h2 id="panelTitle">Tudo pronto para começar</h2>
+      <p class="muted" id="panelText">Abra o modo controle no celular para trocar as telas. Esta página funciona também como um painel local.</p>
+      <div class="visualizer hidden" id="visualizer"></div>
+      <div class="row" id="panelButtons"><button id="startFocus">▶ Iniciar foco de 25 min</button><button id="openRemote">⌁ Mostrar como conectar o celular</button></div>
+    </section>
+  </main>
+
+  <main class="remote-only" id="remoteView">
+    <div class="panel">
+      <div class="eyebrow">Controle remoto</div><h2>Comande sua mesa</h2>
+      <p class="muted">Toque num botão. Quando a sincronização estiver configurada, a tela do projetor muda junto.</p>
+      <div class="remote-controls">
+        <button data-action="home">⌂ Início</button><button data-action="music">♫ Música</button>
+        <button data-action="focus">◷ Foco 25 min</button><button data-action="colors">✦ Trocar tema</button>
+        <button data-action="quote">✧ Inspiração</button><button data-action="game">▦ Desafio</button>
+        <button class="wide" id="fullscreenBtn">⛶ Tela cheia (no projetor)</button>
+      </div>
+    </div>
+  </main>
+
+  <section class="panel" id="setupPanel">
+    <h2>Conectar os aparelhos</h2>
+    <p class="muted">Primeiro teste o painel em um aparelho. Para sincronizar celular e projetor de verdade, configure gratuitamente um banco de dados Firebase.</p>
+    <div class="notice">A versão local já funciona sem conta. A sincronização entre aparelhos só será ativada depois de preencher a configuração abaixo.</div>
+    <div class="row" style="margin-top:14px">
+      <label class="field">Firebase API key<input id="apiKey" placeholder="Cole a apiKey"></label>
+      <label class="field">Project ID<input id="projectId" placeholder="nome-do-projeto"></label>
+      <label class="field">Database URL<input id="databaseURL" placeholder="https://...firebasedatabase.app"></label>
+    </div>
+    <div class="row" style="margin-top:12px"><button id="connectBtn">Conectar sincronização</button><button id="copyDisplay">Copiar link modo projetor</button><button id="copyRemote">Copiar link controle</button></div>
+    <p class="muted" id="setupHelp">Os dados de configuração do Firebase são identificadores do app web. Nunca cole senhas ou chaves privadas aqui.</p>
+  </section>
+  <div class="footer">DESK OS • protótipo web leve • feito para navegador em tela cheia</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+const params=new URLSearchParams(location.search);
+const mode=params.get('mode')||'display';
+if(mode==='remote'){document.body.classList.add('remote');$('remoteView').classList.remove('hidden');$('displayView').classList.add('hidden');$('modeChip').textContent='CONTROLE DO CELULAR';}
+else $('remoteView').classList.add('hidden');
+let state={action:'home',theme:0,focusEnd:0,quote:0,game:0,updated:Date.now()};
+let db=null,roomRef=null,appFirebase=null,ignoreRemote=false;
+const quotes=[
+  'Pequenos passos também levam longe.',
+  'Faça uma coisa de cada vez — e faça com presença.',
+  'A curiosidade é o começo de toda descoberta.',
+  'Respire. Reorganize. Recomece.'
+];
+function toast(t){$('toast').textContent=t;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2600)}
+function tick(){let d=new Date();$('clock').textContent=d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});$('date').textContent=d.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});if(state.focusEnd>Date.now()){$('panelTitle').textContent='Sessão de foco';$('panelText').textContent='Tempo restante: '+Math.ceil((state.focusEnd-Date.now())/60000)+' min';}}
+setInterval(tick,1000);tick();
+function render(){
+ document.querySelectorAll('[data-action]').forEach(b=>b.classList.toggle('active',b.dataset.action===state.action));
+ const titles={home:['Tudo pronto para começar','Use os botões do painel ou o controle no celular.'],music:['Modo música','Visualizador animado — toque sua música em outro aparelho.'],focus:['Modo foco','Prepare um espaço tranquilo e trabalhe numa tarefa de cada vez.'],colors:['Ambiente personalizado','O tema da projeção mudou.'],quote:['Inspiração',quotes[state.quote%quotes.length]],game:['Desafio de atenção','Memorize: azul, verde, roxo. Agora diga a sequência sem olhar!']};
+ const t=titles[state.action]||titles.home;$('panelTitle').textContent=t[0];$('panelText').textContent=t[1];
+ $('visualizer').classList.toggle('hidden',state.action!=='music');
+ if(state.action==='music'&&!$('visualizer').children.length){for(let i=0;i<24;i++){let b=document.createElement('i');b.className='bar';$('visualizer').appendChild(b)}}
+ document.body.style.background=state.theme%3===0?'radial-gradient(ellipse at 15% 0%,#162b53 0,transparent 42%),#070b18':state.theme%3===1?'radial-gradient(ellipse at 15% 0%,#3a1d53 0,transparent 42%),#100817':'radial-gradient(ellipse at 15% 0%,#124b50 0,transparent 42%),#061313';
+}
+function perform(action){
+ if(action==='colors')state.theme=(state.theme+1)%3;
+ if(action==='quote')state.quote=(state.quote+1)%quotes.length;
+ if(action==='focus')state.focusEnd=Date.now()+25*60*1000;
+ if(action==='home')state.focusEnd=0;
+ if(action==='game')state.game++;
+ state.action=action;state.updated=Date.now();render();
+ if(roomRef&&!ignoreRemote)roomRef.set(state).catch(()=>toast('Não foi possível sincronizar. Verifique a conexão.'));
+}
+document.querySelectorAll('[data-action]').forEach(b=>b.addEventListener('click',()=>perform(b.dataset.action)));
+$('startFocus').addEventListener('click',()=>perform('focus'));
+$('openRemote').addEventListener('click',()=>toast('Publique esta página e abra o link ?mode=remote no celular.'));
+$('fullscreenBtn').addEventListener('click',()=>toast('Para tela cheia, use o menu do navegador no projetor.'));
+function baseUrl(){return location.href.split('?')[0].split('#')[0]}
+$('copyDisplay').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(baseUrl()+'?mode=display');toast('Link do projetor copiado!')}catch(e){toast(baseUrl()+'?mode=display')}});
+$('copyRemote').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(baseUrl()+'?mode=remote');toast('Link do controle copiado!')}catch(e){toast(baseUrl()+'?mode=remote')}});
+async function connectFirebase(){
+ const apiKey=$('apiKey').value.trim(),projectId=$('projectId').value.trim(),databaseURL=$('databaseURL').value.trim();
+ if(!apiKey||!projectId||!databaseURL){toast('Preencha os três campos do Firebase.');return}
+ try{
+  if(!window.firebase){await new Promise((resolve,reject)=>{let s=document.createElement('script');s.src='https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js';s.onload=resolve;s.onerror=reject;document.head.appendChild(s)});await new Promise((resolve,reject)=>{let s=document.createElement('script');s.src='https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js';s.onload=resolve;s.onerror=reject;document.head.appendChild(s)})}
+  appFirebase=window.firebase.apps.length?window.firebase.app():window.firebase.initializeApp({apiKey,projectId,databaseURL,appId:'1:000000000000:web:desk-os-demo'});
+  db=window.firebase.database();roomRef=db.ref('deskos/rooms/main');
+  roomRef.on('value',snap=>{let val=snap.val();if(val&&val.updated>=state.updated){ignoreRemote=true;state={...state,...val};render();ignoreRemote=false;}});
+  $('status').textContent='Sincronização conectada';$('dot').classList.add('ok');toast('Conectado! Abra o mesmo link no outro aparelho.');
+ }catch(e){console.error(e);toast('Falha ao conectar. Confira configuração e regras do Firebase.')}
+}
+$('connectBtn').addEventListener('click',connectFirebase);
+render();
+</script>
+</body></html>
